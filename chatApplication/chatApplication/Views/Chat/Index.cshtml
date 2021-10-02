@@ -1,0 +1,125 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div>
+    <div class="row" id="ua" style="display:none">
+        <div class="col-12">
+            <div class="form-group row">
+                <label class="col-form-label col-2 offset-1">Username</label>
+                <div class="col-5 offset-1">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="u">
+                        <button type="button" id="c" class="btn btn-success btn-sm">Join</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" id="da" style="display:none">
+        <div class="col-11 offset-1">
+            Joined as <span id="d" class="text-success"></span>
+        </div>
+    </div>
+    <div class="row" id="ca" style="display:none">
+        <div class="col-2 offset-1">
+            <h4>Users</h4>
+            <ul class="list-group" id="users">
+            </ul>
+        </div>
+        <div class="col-6 offset-1">
+            <div class="form-group row">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="chatMessage">
+                    <button type="button" id="s" class="btn btn-success btn-sm">Send</button>
+                    <button type="button" id="br" class="btn btn-success btn-sm">Browse</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-10 offset-1 my-2">
+                    <h4>Messages</h4>
+                    <div class="list-group" id="chats"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<input type="file" id="f" style="display:none" accept=".jpg,.png,.gif" />
+
+<br />
+<br />
+
+
+
+
+
+@section scripts {
+
+    <script src="~/libs/jquery/jquery.js"></script>
+    <script src="~/libs/signalr/signalr.js"></script>
+
+    <script>
+        var con = new signalR.HubConnectionBuilder().withUrl("/message").build();
+        con.on('Connected', (m) => {
+            $("#ua").show();
+
+        });
+        con.on('Joined', (m) => {
+            $("#ua").hide();
+            $("#da").show();
+            $("#ca").show();
+            $("#d").html(displayName);
+        });
+        con.on('DuplicateUser', (m) => {
+            console.log(m);
+        });
+        con.on('UpdateUsers', userList => {
+            //console.log(userList);
+
+            $("#users").empty();
+            for (var i = 0; i < userList.length; i++) {
+
+                $("#users").append(
+                    `<li class='list-group-item'>${userList[i]}</li>`
+                );
+            }
+        });
+        con.on("Message", (u, m) => {
+            if (displayName == u) $("#chats").append(`<li class="list-group-item active"><span>${u}</span>: ${m}</li>`);
+            else $("#chats").append(`<li class="list-group-item"><span>${u}</span>: ${m}</li>`);
+        })
+        var displayName = '';
+        con.start().then(() => {
+            $("#ua").show();
+            $("#c").click(() => {
+                displayName = $("#u").val();
+                con.invoke("AddMe", displayName);
+                $("#u").val('');
+            });
+            $('#s').click(() => {
+                if ($("#chatMessage").val() == "") return;
+                con.invoke("Send", displayName, $("#chatMessage").val());
+            });
+            $('#br').click(() => {
+                $('#f').click();
+            });
+            $('#f').change(() => {
+                var file = document.getElementById("f").files[0];
+                console.log(file.name);
+                console.log(file.type);
+                var reader = new FileReader();
+                reader.onloadend = function () {
+                    var data = { filename: file.name, image: reader.result };
+                    //console.log(data);
+                    con.invoke("Upload", displayName, data);
+                }
+                reader.readAsDataURL(file);
+
+            })
+        }).catch(err => {
+            console.log(err);
+        })
+    </script>
+}
+
