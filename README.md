@@ -21,8 +21,10 @@ A group of people can share message with file in real time.
 <strong>Command to run this application:</strong> <br />
 
 1. Open cmd in project folder. 
-2. Write these command - 
-  a. dotnet build
-  b. dotnet run
+2. Write these command - <br />
+    <ul>
+      <li>dotnet build</li>
+      <li>dotnet run</li>
+    </ul>
 3. Open browser and type http://localhost:5000/ in address bar. 
 4. Press Enter button in the keyboard.
