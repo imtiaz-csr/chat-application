@@ -15,3 +15,14 @@ A group of people can share message with file in real time.
   <li><a href="https://en.wikipedia.org/wiki/CSS">CSS</a></li>
   <li><a href="https://docs.microsoft.com/en-us/visualstudio/?view=vs-2019">Visual Studio 2019</a></li>
 </ul>
+
+<hr />
+
+<strong>Command to run this application:</strong> <br />
+
+1. Open cmd in project folder. 
+2. Write these command - 
+  a. dotnet build
+  b. dotnet run
+3. Open browser and type http://localhost:5000/ in address bar. 
+4. Press Enter button in the keyboard.
