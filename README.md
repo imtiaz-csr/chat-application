@@ -20,11 +20,12 @@ A group of people can share message with file in real time.
 
 <strong>Command to run this application:</strong> <br />
 
-1. Open cmd in project folder. 
-2. Write these command - <br />
+1. Clone this repository in your machine by executing this command:  git clone https://github.com/imtiaz-csr/chat-application.git
+2. Open cmd in project folder. 
+3. Write these command - <br />
     <ul>
       <li>dotnet build</li>
       <li>dotnet run</li>
     </ul>
-3. Open browser and type http://localhost:5000/ in address bar. 
-4. Press Enter button in the keyboard.
+4. Open browser and type http://localhost:5000/ in address bar. 
+5. Press Enter button in the keyboard.
